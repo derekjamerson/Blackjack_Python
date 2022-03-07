@@ -131,5 +131,6 @@ class Game:
             self.clean_up()
 
 
-game = Game()
-game.play_game()
+if __name__ == 'main':
+    game = Game()
+    game.play_game()
