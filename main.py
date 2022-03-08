@@ -7,19 +7,19 @@ class Card:
         self.suit = s
 
     def __repr__(self):
-        return self.value + " of " + self.suit
+        return f'{self.value} of {self.suit}'
 
 
 class Deck:
     suits = ["Clubs", "Hearts", "Spades", "Diamonds"]
 
-    values = [None, None, "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"]
+    values = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"]
 
     def __init__(self):
         self.cards = []
-        for i in range(2, 15):
-            for j in range(4):
-                self.cards.append(Card(self.values[i], self.suits[j]))
+        for suit in self.suits:
+            for value in self.values:
+                self.cards.append(Card(value, suit))
         shuffle(self.cards)
 
 
@@ -64,8 +64,8 @@ class Game:
         self.deal_card(self.dealer)
 
     def print_game(self):
-        print("Player: %s" % self.player.hand)
-        print("Dealer: [%s, HIDDEN]" % self.dealer.hand[0])
+        print(f'Player: {self.player.hand}')
+        print(f'Dealer: [{self.dealer.hand[0]}, HIDDEN]')
 
     def game_over(self):
         p_score = self.player.calculate_score()
