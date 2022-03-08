@@ -2,25 +2,24 @@ from random import shuffle
 
 
 class Card:
-    suits = ["Clubs", "Hearts", "Spades", "Diamonds"]
-
-    values = [None, None, "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"]
-
     def __init__(self, v, s):
         self.value = v
         self.suit = s
 
     def __repr__(self):
-        v = self.values[self.value] + " of " + self.suits[self.suit]
-        return v
+        return f'{self.value} of {self.suit}'
 
 
 class Deck:
+    suits = ["Clubs", "Hearts", "Spades", "Diamonds"]
+
+    values = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"]
+
     def __init__(self):
         self.cards = []
-        for i in range(2, 15):
-            for j in range(4):
-                self.cards.append(Card(i, j))
+        for suit in self.suits:
+            for value in self.values:
+                self.cards.append(Card(value, suit))
         shuffle(self.cards)
 
 
@@ -32,10 +31,10 @@ class Player:
         num_of_aces = 0
         calc_score = 0
         for c in self.hand:
-            if c.value == 14:
+            if c.value == 'Ace':
                 num_of_aces += 1
                 calc_score += 11
-            elif c.value > 10:
+            elif c.value in ["Jack", "Queen", "King"]:
                 calc_score += 10
             else:
                 calc_score += int(c.value)
@@ -65,8 +64,8 @@ class Game:
         self.deal_card(self.dealer)
 
     def print_game(self):
-        print("Player: %s" % self.player.hand)
-        print("Dealer: [%s, HIDDEN]" % self.dealer.hand[0])
+        print(f'Player: {self.player.hand}')
+        print(f'Dealer: [{self.dealer.hand[0]}, HIDDEN]')
 
     def game_over(self):
         p_score = self.player.calculate_score()
@@ -131,6 +130,6 @@ class Game:
             self.clean_up()
 
 
-if __name__ == 'main':
+if __name__ == '__main__':
     game = Game()
     game.play_game()
