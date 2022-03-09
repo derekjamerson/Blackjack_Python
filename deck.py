@@ -3,9 +3,9 @@ from card import Card
 
 
 class Deck:
-    suits = ["Clubs", "Hearts", "Spades", "Diamonds"]
+    suits = ["\u2663", "\u2665", "\u2660", "\u2666"]
 
-    values = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"]
+    values = range(1, 14)
 
     def __init__(self):
         self.cards = []
