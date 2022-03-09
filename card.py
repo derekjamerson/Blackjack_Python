@@ -13,7 +13,7 @@ class Card:
         self.score = self.get_score()
 
     def __repr__(self):
-        return f'{self.get_value_name()}{self.suit}'
+        return f'{self.value_name}{self.suit}'
 
     def get_score(self):
         if self.value > 10:
