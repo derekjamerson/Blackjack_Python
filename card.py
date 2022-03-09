@@ -7,8 +7,9 @@ class Card:
     }
 
     def __init__(self, v, s):
-        self.value = v
         self.suit = s
+        self.value = v
+        self.value_name = self.face_value_mapping.get(self.value, self.value)
         self.score = self.get_score()
 
     def __repr__(self):
@@ -22,5 +23,4 @@ class Card:
         else:
             return self.value
 
-    def get_value_name(self):
-        return self.face_value_mapping.get(self.value, self.value)
+
