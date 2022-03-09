@@ -1,4 +1,11 @@
 class Card:
+    face_value_mapping = {
+        1: 'A',
+        11: 'J',
+        12: 'Q',
+        13: 'K',
+    }
+
     def __init__(self, v, s):
         self.value = v
         self.suit = s
@@ -16,14 +23,4 @@ class Card:
             return self.value
 
     def get_value_name(self):
-        match self.value:
-            case 1:
-                return 'A'
-            case 11:
-                return 'J'
-            case 12:
-                return 'Q'
-            case 13:
-                return 'K'
-            case _:
-                return str(self.value)
+        return self.face_value_mapping.get(self.value, self.value)
