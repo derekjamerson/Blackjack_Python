@@ -38,10 +38,10 @@ class Game:
         else:
             final_string = '*** YOU LOSE ***'
         print(final_string)
-        print('Player: %s %s' % (p_score, self.player.hand))
-        print('Dealer: %s %s' % (d_score, self.dealer.hand))
+        print(f'Player: {p_score} {self.player.hand}')
+        print(f'Dealer: {p_score} {self.dealer.hand}')
         print(final_string)
-        print('Score: %s' % self.score)
+        print(f'Score: {self.score}')
 
     def discard_hands(self):
         self.player.hand.clear()
