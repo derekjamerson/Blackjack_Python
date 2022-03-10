@@ -1,3 +1,5 @@
+from operator import attrgetter
+
 from deck import Deck
 from player import Player
 
@@ -25,14 +27,22 @@ class Game:
     def game_over(self):
         p_score = self.player.calculate_score()
         d_score = self.dealer.calculate_score()
-        print("Player: %s %s" % (p_score, self.player.hand))
-        print("Dealer: %s %s" % (d_score, self.dealer.hand))
+        you_win = False
         if d_score < p_score <= 21 or p_score <= 21 < d_score:
-            print("*** YOU WIN ***")
+            you_win = True
             self.score += 1
         else:
-            print("*** YOU LOSE ***")
+            you_win = False
             self.score -= 1
+        final_string = ""
+        if you_win:
+            final_string = "*** YOU WIN ***"
+        else:
+            final_string = "*** YOU LOSE ***"
+        print(final_string)
+        print("Player: %s %s" % (p_score, self.player.hand))
+        print("Dealer: %s %s" % (d_score, self.dealer.hand))
+        print(final_string)
         print("Score: %s" % self.score)
 
     def discard_hands(self):
