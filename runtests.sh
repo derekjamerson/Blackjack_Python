@@ -1,2 +1,2 @@
 #! /bin/bash
-nose2 . -v
+nose2 -v
