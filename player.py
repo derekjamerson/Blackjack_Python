@@ -6,7 +6,7 @@ class Player:
         num_of_aces = 0
         calc_score = 0
         for c in self.hand:
-            if c.value == 'Ace':
+            if c.value == "Ace":
                 num_of_aces += 1
                 calc_score += 11
             elif c.value in ["Jack", "Queen", "King"]:
