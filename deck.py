@@ -23,7 +23,7 @@ class Deck:
 
     def __init__(self):
         self.cards = []
-        for suit in self.suits:
-            for value in self.values:
+        for suit in '♣♥♠♦':
+            for value in range(1, 14):
                 self.cards.append(Card(value, suit))
         shuffle(self.cards)
