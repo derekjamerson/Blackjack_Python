@@ -6,7 +6,7 @@ class Player:
         self.hand = []
 
     def calculate_score(self):
-        self.hand.sort(key=attrgetter('value'), reverse=True)
+        self.hand.sort(reverse=True)
         hand_score = 0
         for c in self.hand:
             if c.score == 11 and hand_score > 10:
