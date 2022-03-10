@@ -1,2 +1,2 @@
 #! /bin/bash
-nosetests . -v
+nose2 . -v
