@@ -27,3 +27,8 @@ class Card:
 
     def __lt__(self, other):
         return self.value < other.value
+
+    def __radd__(self, other):
+        if self.score + other > 21:
+            return self.score + other - 10
+        return self.score + other
