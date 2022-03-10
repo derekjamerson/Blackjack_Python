@@ -63,13 +63,12 @@ class Game:
             while True:
                 self.print_game()
                 response = input("Enter 'S' to stay, 'H' to hit: ").lower()
-                match response:
-                    case "s":
-                        break
-                    case "h":
-                        self.deal_card(self.player)
-                    case _:
-                        print("Invalid option.")
+                if response == "s":
+                    break
+                elif response == "h":
+                    self.deal_card(self.player)
+                else:
+                    print("Invalid option.")
                 player_score = self.player.calculate_score()
                 if player_score > 21:
                     self.game_over()
