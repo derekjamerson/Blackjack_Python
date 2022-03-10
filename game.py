@@ -1,3 +1,5 @@
+from operator import attrgetter
+
 from deck import Deck
 from player import Player
 
@@ -20,7 +22,7 @@ class Game:
 
     def print_game(self):
         print(f'Player: {self.player.hand}')
-        print(f'Dealer: [{self.dealer.hand[0]}, HIDDEN]')
+        print(f'Dealer: [{self.dealer.hand[0]}, ??]')
 
     def game_over(self):
         p_score = self.player.calculate_score()
@@ -43,7 +45,7 @@ class Game:
         print(final_string)
         print("Score: %s" % self.score)
 
-    def clean_up(self):
+    def discard_hands(self):
         self.player.hand.clear()
         self.dealer.hand.clear()
 
@@ -81,4 +83,4 @@ class Game:
                 else:
                     self.deal_card(self.dealer)
             self.game_over()
-            self.clean_up()
+            self.discard_hands()
