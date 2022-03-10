@@ -1,5 +1,3 @@
-from operator import attrgetter
-
 from deck import Deck
 from player import Player
 
@@ -34,16 +32,16 @@ class Game:
         else:
             you_win = False
             self.score -= 1
-        final_string = ""
+        final_string = ''
         if you_win:
-            final_string = "*** YOU WIN ***"
+            final_string = '*** YOU WIN ***'
         else:
-            final_string = "*** YOU LOSE ***"
+            final_string = '*** YOU LOSE ***'
         print(final_string)
-        print("Player: %s %s" % (p_score, self.player.hand))
-        print("Dealer: %s %s" % (d_score, self.dealer.hand))
+        print('Player: %s %s' % (p_score, self.player.hand))
+        print('Dealer: %s %s' % (d_score, self.dealer.hand))
         print(final_string)
-        print("Score: %s" % self.score)
+        print('Score: %s' % self.score)
 
     def discard_hands(self):
         self.player.hand.clear()
@@ -51,27 +49,26 @@ class Game:
 
     def play_game(self):
         cards = self.deck.cards
-        print("BlackJack")
+        print('BlackJack')
         while True:
             player_did_not_bust = True
-            response = input("Enter 'Q' to quit. Enter any key to play:").lower()
+            response = input('Enter \'Q\' to quit. Enter any key to play:').lower()
             if response == 'q':
                 break
             if len(cards) < 26:
-                print("Shuffling...")
+                print('Shuffling...')
                 self.deck = Deck()
                 cards = self.deck.cards
             self.deal_game()
             while True:
                 self.print_game()
-                response = input("Enter 'S' to stay, 'H' to hit: ").lower()
-                match response:
-                    case "s":
-                        break
-                    case "h":
-                        self.deal_card(self.player)
-                    case _:
-                        print("Invalid option.")
+                response = input('Enter \'S\' to stay, \'H\' to hit: ').lower()
+                if response == 's':
+                    break
+                elif response == 'h':
+                    self.deal_card(self.player)
+                else:
+                    print('Invalid option.')
                 player_score = self.player.calculate_score()
                 if player_score > 21:
                     self.game_over()
