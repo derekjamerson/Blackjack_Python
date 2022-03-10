@@ -25,14 +25,12 @@ class Game:
     def game_over(self):
         p_score = self.player.calculate_score()
         d_score = self.dealer.calculate_score()
-        you_win = False
         if d_score < p_score <= 21 or p_score <= 21 < d_score:
             you_win = True
             self.score += 1
         else:
             you_win = False
             self.score -= 1
-        final_string = ''
         if you_win:
             final_string = '*** YOU WIN ***'
         else:
