@@ -37,7 +37,7 @@ class Game:
             final_string = '*** YOU LOSE ***'
         print(final_string)
         print(f'Player: {p_score} {self.player.hand}')
-        print(f'Dealer: {p_score} {self.dealer.hand}')
+        print(f'Dealer: {d_score} {self.dealer.hand}')
         print(final_string)
         print(f'Score: {self.score}')
 
@@ -49,7 +49,6 @@ class Game:
         cards = self.deck.cards
         print('BlackJack')
         while True:
-            player_did_not_bust = True
             response = input('Enter \'Q\' to quit. Enter any key to play:').lower()
             if response == 'q':
                 break
@@ -58,25 +57,27 @@ class Game:
                 self.deck = Deck()
                 cards = self.deck.cards
             self.deal_game()
-            while True:
-                self.print_game()
-                response = input('Enter \'S\' to stay, \'H\' to hit: ').lower()
-                if response == 's':
-                    break
-                elif response == 'h':
-                    self.deal_card(self.player)
-                else:
-                    print('Invalid option.')
-                player_score = self.player.calculate_score()
-                if player_score > 21:
-                    self.game_over()
-                    player_did_not_bust = False
-                    break
-            while player_did_not_bust:
-                dealer_score = self.dealer.calculate_score()
-                if dealer_score > 16:
-                    break
-                else:
-                    self.deal_card(self.dealer)
+            if self.turn_player() <= 21:
+                self.turn_dealer()
             self.game_over()
             self.discard_hands()
+
+    def turn_player(self):
+        while True:
+            self.print_game()
+            response = input('Enter \'S\' to stay, \'H\' to hit: ').lower()
+            if response == 's':
+                return self.player.calculate_score()
+            elif response == 'h':
+                self.deal_card(self.player)
+                if self.player.calculate_score() > 21:
+                    return self.player.calculate_score()
+            else:
+                print('Invalid option.')
+
+    def turn_dealer(self):
+        while True:
+            if self.dealer.calculate_score() > 16:
+                return self.dealer.calculate_score()
+            else:
+                self.deal_card(self.dealer)
