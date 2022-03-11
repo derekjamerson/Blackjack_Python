@@ -29,6 +29,4 @@ class Card:
         return self.value < other.value
 
     def __radd__(self, other):
-        if self.score + other > 21 and self.value == 1:
-            return self.score + other - 10
         return self.score + other

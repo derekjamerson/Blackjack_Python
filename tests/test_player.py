@@ -41,7 +41,25 @@ class PlayerTestCase(TestCase):
         self.player.hand = [Card(first_value, 1), Card(second_value, 2)]
         self.assertEqual(self.player.score, 12)
 
-    # def test_player_hand_21_aces(self):
-    #     for num in range(1, 22):
-    #         self.player.hand.append(Card(1, 3))
-    #     self.assertEqual(self.player.score, 21)
+    def test_player_hand_j_q_k(self):
+        first_value = 12
+        second_value = 12
+        tertiary_value = 13
+        self.player.hand = [
+            Card(first_value, 1),
+            Card(second_value, 2),
+            Card(tertiary_value, 3),
+        ]
+        self.assertEqual(self.player.score, 30)
+
+    def test_player_hand_21_aces(self):
+        self.player.hand = []
+        for num in range(21):
+            self.player.hand.append(Card(1, 3))
+        self.assertEqual(self.player.score, 21)
+
+    def test_player_hand_one_of_each(self):
+        self.player.hand = []
+        for num in range(13):
+            self.player.hand.append(Card(num, 1))
+        self.assertEqual(self.player.score, sum(range(13)) - 3)
