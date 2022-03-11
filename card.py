@@ -26,5 +26,4 @@ class Card:
         return f'{self.value_name}{self.suit}'
 
     def __hash__(self):
-        suit_dict = {'♣': 1, '♥': 2, '♠': 3, '♦': 4}
-        return self.value * 10 + suit_dict.get(self.suit)
+        return hash((self.value, self.suit))
