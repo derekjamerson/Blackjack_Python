@@ -44,11 +44,11 @@ class PlayerTestCase(TestCase):
     def test_player_hand_j_q_k(self):
         first_value = 12
         second_value = 12
-        tertiary_value = 13
+        third_value = 13
         self.player.hand = [
             Card(first_value, 1),
             Card(second_value, 2),
-            Card(tertiary_value, 3),
+            Card(third_value, 3),
         ]
         self.assertEqual(self.player.score, 30)
 
