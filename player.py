@@ -11,3 +11,6 @@ class Player:
             ace_counter += 1
             raw_score -= 10
         return raw_score
+
+    def choose_to_stay(self):
+        raise Exception("Not Implemented")
