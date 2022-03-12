@@ -1,12 +1,12 @@
-from dealer import Dealer
 from deck import Deck
-from player import Player
+from player import HumanPlayer
+from player.dealer import Dealer
 
 
 class Game:
     def __init__(self):
         self.deck = Deck()
-        self.player = Player()
+        self.player = HumanPlayer()
         self.dealer = Dealer()
         self.score = 0
 
