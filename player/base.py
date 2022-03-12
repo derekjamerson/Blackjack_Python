@@ -13,4 +13,4 @@ class Player:
         return raw_score
 
     def choose_to_stay(self):
-        raise Exception("Not Implemented")
+        raise NotImplementedError()
