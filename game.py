@@ -1,3 +1,4 @@
+from dealer import Dealer
 from deck import Deck
 from player import Player
 
@@ -6,7 +7,7 @@ class Game:
     def __init__(self):
         self.deck = Deck()
         self.player = Player()
-        self.dealer = Player()
+        self.dealer = Dealer()
         self.score = 0
 
     def deal_card(self, receiver):
@@ -23,8 +24,8 @@ class Game:
         print(f'Dealer: [{self.dealer.hand[0]}, ??]')
 
     def game_over(self):
-        p_score = self.player.calculate_score()
-        d_score = self.dealer.calculate_score()
+        p_score = self.player.score
+        d_score = self.dealer.score
         if d_score < p_score <= 21 or p_score <= 21 < d_score:
             you_win = True
             self.score += 1
@@ -62,22 +63,21 @@ class Game:
             self.game_over()
             self.discard_hands()
 
+    def turn_dealer(self):
+        while True:
+            if self.dealer.choose_to_stay():
+                break
+            self.deal_card(self.dealer)
+
     def turn_player(self):
         while True:
             self.print_game()
             response = input('Enter \'S\' to stay, \'H\' to hit: ').lower()
             if response == 's':
-                return self.player.calculate_score()
+                return self.player.score
             elif response == 'h':
                 self.deal_card(self.player)
-                if self.player.calculate_score() > 21:
-                    return self.player.calculate_score()
+                if self.player.score > 21:
+                    return self.player.score
             else:
                 print('Invalid option.')
-
-    def turn_dealer(self):
-        while True:
-            if self.dealer.calculate_score() > 16:
-                return self.dealer.calculate_score()
-            else:
-                self.deal_card(self.dealer)
