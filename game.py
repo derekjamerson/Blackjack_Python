@@ -1,3 +1,4 @@
+from dealer import Dealer
 from deck import Deck
 from player import Player
 
@@ -6,7 +7,7 @@ class Game:
     def __init__(self):
         self.deck = Deck()
         self.player = Player()
-        self.dealer = Player()
+        self.dealer = Dealer()
         self.score = 0
 
     def deal_card(self, receiver):
@@ -62,6 +63,12 @@ class Game:
             self.game_over()
             self.discard_hands()
 
+    def turn_dealer(self):
+        while True:
+            if self.dealer.choose_to_stay():
+                break
+            self.deal_card(self.dealer)
+
     def turn_player(self):
         while True:
             self.print_game()
@@ -74,10 +81,3 @@ class Game:
                     return self.player.score
             else:
                 print('Invalid option.')
-
-    def turn_dealer(self):
-        while True:
-            if self.dealer.score > 16:
-                return self.dealer.score
-            else:
-                self.deal_card(self.dealer)
