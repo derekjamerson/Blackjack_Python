@@ -21,17 +21,13 @@ class CardTestCase(TestCase):
 
     def test_game_deal_hands(self):
         self.game.deal_game()
-        player_hand_count = len(self.game.player.hand)
-        dealer_hand_count = len(self.game.dealer.hand)
-        self.assertEqual(player_hand_count, 2)
-        self.assertEqual(dealer_hand_count, 2)
+        self.assertEqual(len(self.game.player.hand), 2)
+        self.assertEqual(len(self.game.dealer.hand), 2)
 
     def test_game_discard_hands(self):
         self.game.discard_hands()
-        player_hand_count = len(self.game.player.hand)
-        dealer_hand_count = len(self.game.dealer.hand)
-        self.assertEqual(player_hand_count, 0)
-        self.assertEqual(dealer_hand_count, 0)
+        self.assertEqual(len(self.game.player.hand), 0)
+        self.assertEqual(len(self.game.dealer.hand), 0)
 
     def test_game_dealer_turn(self):
         self.assert_dealer_turn([2, 5], True)
