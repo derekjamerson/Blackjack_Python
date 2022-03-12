@@ -27,3 +27,9 @@ class Card:
 
     def __hash__(self):
         return hash((self.value, self.suit))
+    
+    def __lt__(self, other):
+        return self.value < other.value
+
+    def __radd__(self, other):
+        return self.score + other
