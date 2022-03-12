@@ -24,3 +24,9 @@ class Card:
 
     def __repr__(self):
         return f'{self.value_name}{self.suit}'
+
+    def __lt__(self, other):
+        return self.value < other.value
+
+    def __radd__(self, other):
+        return self.score + other

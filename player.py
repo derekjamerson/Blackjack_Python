@@ -1,16 +1,13 @@
-from operator import attrgetter
-
-
 class Player:
     def __init__(self):
         self.hand = []
 
-    def calculate_score(self):
-        self.hand.sort(key=attrgetter('value'), reverse=True)
-        hand_score = 0
-        for c in self.hand:
-            if c.score == 11 and hand_score > 10:
-                hand_score += 1
-            else:
-                hand_score += c.score
-        return hand_score
+    @property
+    def score(self):
+        raw_score = sum(sorted(self.hand, reverse=True))
+        ace_counter = 0
+        num_of_aces = len([x for x in self.hand if x.value == 1])
+        while raw_score > 21 and ace_counter < num_of_aces:
+            ace_counter += 1
+            raw_score -= 10
+        return raw_score
