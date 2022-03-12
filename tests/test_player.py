@@ -5,8 +5,6 @@ from player import Player
 
 
 class PlayerTestCase(TestCase):
-    player = None
-
     @classmethod
     def setUpClass(cls):
         cls.player = Player()
