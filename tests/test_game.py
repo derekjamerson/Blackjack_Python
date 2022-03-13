@@ -4,7 +4,7 @@ from card import Card
 from game import Game
 
 
-class CardTestCase(TestCase):
+class GameTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.game = Game()
