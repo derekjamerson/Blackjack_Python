@@ -43,6 +43,10 @@ class Game:
             f'Score: {self.score}'
         )
 
+    def shuffle_if_needed(self):
+        if len(self.deck.cards) < 26:
+            self.deck = Deck()
+
     def discard_hands(self):
         self.player.hand.clear()
         self.dealer.hand.clear()
@@ -54,9 +58,7 @@ class Game:
             )
             if response == 'q':
                 break
-            if len(self.deck.cards) < 26:
-                print('Shuffling...')
-                self.deck = Deck()
+            self.shuffle_if_needed()
             self.deal_game()
             if self.turn_player() <= 21:
                 self.turn_dealer()
