@@ -22,45 +22,46 @@ class Game:
         print(f'Player: {self.player.hand}')
         print(f'Dealer: [{self.dealer.hand[0]}, ??]')
 
-    def game_over(self):
+    def decide_winner(self):
         p_score = self.player.score
         d_score = self.dealer.score
         if d_score < p_score <= 21 or p_score <= 21 < d_score:
-            you_win = True
             self.score += 1
-        else:
-            you_win = False
-            self.score -= 1
+            return True
+        self.score -= 1
+        return False
+
+    def print_game_over(self, you_win):
         if you_win:
             final_string = '*** YOU WIN ***'
         else:
             final_string = '*** YOU LOSE ***'
-        print(final_string)
-        print(f'Player: {p_score} {self.player.hand}')
-        print(f'Dealer: {d_score} {self.dealer.hand}')
-        print(final_string)
-        print(f'Score: {self.score}')
+        print(
+            f'Player: {self.player.score} {self.player.hand}\n'
+            f'Dealer: {self.dealer.score} {self.dealer.hand}\n'
+            f'{final_string}\n'
+            f'Score: {self.score}'
+        )
 
     def discard_hands(self):
         self.player.hand.clear()
         self.dealer.hand.clear()
 
     def play_game(self):
-        cards = self.deck.cards
         while True:
             response = HumanPlayer.get_input_from_user(
                 "Enter 'Q' to quit. 'P' to play:", ['q', 'p']
             )
             if response == 'q':
                 break
-            if len(cards) < 26:
+            if len(self.deck.cards) < 26:
                 print('Shuffling...')
                 self.deck = Deck()
-                cards = self.deck.cards
             self.deal_game()
             if self.turn_player() <= 21:
                 self.turn_dealer()
-            self.game_over()
+            you_win = self.decide_winner()
+            self.print_game_over(you_win)
             self.discard_hands()
 
     def turn_dealer(self):
