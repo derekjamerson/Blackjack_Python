@@ -1,13 +1,12 @@
 from deck import Deck
-from player import HumanPlayer
-from player.dealer import Dealer
+from player import DealerPlayer, HumanPlayer
 
 
 class Game:
     def __init__(self):
         self.deck = Deck()
         self.player = HumanPlayer()
-        self.dealer = Dealer()
+        self.dealer = DealerPlayer()
         self.score = 0
 
     def deal_card(self, receiver):
@@ -48,9 +47,10 @@ class Game:
 
     def play_game(self):
         cards = self.deck.cards
-        print('BlackJack')
         while True:
-            response = input('Enter \'Q\' to quit. Enter any key to play:').lower()
+            response = HumanPlayer.get_input_from_user(
+                "Enter 'Q' to quit. 'P' to play:", ['q', 'p']
+            )
             if response == 'q':
                 break
             if len(cards) < 26:
@@ -72,12 +72,9 @@ class Game:
     def turn_player(self):
         while True:
             self.print_game()
-            response = input('Enter \'S\' to stay, \'H\' to hit: ').lower()
-            if response == 's':
+            if self.player.choose_to_stay():
                 return self.player.score
-            elif response == 'h':
+            else:
                 self.deal_card(self.player)
                 if self.player.score > 21:
                     return self.player.score
-            else:
-                print('Invalid option.')

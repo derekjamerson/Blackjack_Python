@@ -1,5 +1,5 @@
 from player.base import Player
-from player.dealer import Dealer
+from player.dealer_player import DealerPlayer
 from player.human_player import HumanPlayer
 
-__all__ = ['Player', 'Dealer', 'HumanPlayer']
+__all__ = ['Player', 'DealerPlayer', 'HumanPlayer']

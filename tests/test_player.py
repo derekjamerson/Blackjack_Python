@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from card import Card
-from player.base import Player
+from player import Player
 
 
 class PlayerTestCase(TestCase):
