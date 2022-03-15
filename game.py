@@ -22,12 +22,12 @@ class Game:
         d_score, dealer_card = self.get_dealer_hand_info(game_is_over)
         print(
             f'Player: {self.human_player.score} {self.human_player.hand}\n'
-            f'Dealer: {d_score} [{self.dealer.hand[1]}, {dealer_card}]'
+            f'Dealer: {d_score} [{self.dealer.hand[0]}, {dealer_card}]'
         )
 
     def get_dealer_hand_info(self, game_is_over):
         if game_is_over:
-            return self.dealer.score, self.dealer.hand[0]
+            return self.dealer.score, self.dealer.hand[1]
         return '??', '??'
 
     def decide_winner(self):
@@ -41,10 +41,10 @@ class Game:
 
     def print_score(self):
         if self.decide_winner():
-            print('*** You Win ***')
+            output = '*** You Win ***'
         else:
-            print('*** You Lose ***')
-        print(f'Score: {self.score}')
+            output = '*** You Lose ***'
+        print(f'{output}\n Score: {self.score}')
 
     def shuffle_if_needed(self):
         if len(self.deck.cards) < 26:

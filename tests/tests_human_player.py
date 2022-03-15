@@ -10,7 +10,7 @@ class HumanPlayerTestCase(TestCase):
         super().setUpClass()
         cls.player = HumanPlayer()
 
-    @patch('builtins.input', side_effect=['s', 'h'])
+    @patch('builtins.input', side_effect=['a', 's', 'h'])
     def test_human_player_choose_to_stay(self, side_effects):
         self.assertEqual(self.player.choose_to_stay(), True)
         self.assertEqual(self.player.choose_to_stay(), False)
