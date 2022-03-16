@@ -1,6 +1,6 @@
 import io
 import sys
-from functools import partial
+from contextlib import contextmanager
 from unittest import TestCase, mock
 
 from card import Card
@@ -43,12 +43,12 @@ class GameTestCase(TestCase):
         self.assert_dealer_turn([3, 3, 3, 3, 5], False)
         self.assert_dealer_turn([11, 12], False)
 
-    def assert_console_output(self, method_to_run, expected_output):
+    @contextmanager
+    def capture_console_output(self):
         captured_output = io.StringIO()
         sys.stdout = captured_output
-        method_to_run()
+        yield captured_output
         sys.stdout = sys.__stdout__
-        self.assertEqual(expected_output, captured_output.getvalue())
 
     def assert_printed_game(self, p_cards, d_cards, game_over):
         self.game.human_player.hand = self.num_list_to_cards(p_cards)
@@ -63,9 +63,9 @@ class GameTestCase(TestCase):
                 f'Player: 4 {self.game.human_player.hand}\n'
                 f'Dealer: ?? [{self.game.dealer.hand[0]}, ??]\n'
             )
-        self.assert_console_output(
-            partial(self.game.print_game, game_over), expected_string
-        )
+        with self.capture_console_output() as captured_output:
+            self.game.print_game(game_over)
+        self.assertEqual(captured_output.getvalue(), expected_string)
 
     def test_game_print_game(self):
         self.assert_printed_game([2, 2], [3, 3], False)
@@ -91,10 +91,12 @@ class GameTestCase(TestCase):
         self.game.human_player.hand = self.num_list_to_cards(p_cards)
         self.game.dealer.hand = self.num_list_to_cards(d_cards)
         if player_win:
-            output = '*** You Win ***\n Score: 1\n'
+            expected_string = '*** You Win ***\n Score: 1\n'
         else:
-            output = '*** You Lose ***\n Score: 0\n'
-        self.assert_console_output(self.game.print_score, output)
+            expected_string = '*** You Lose ***\n Score: 0\n'
+        with self.capture_console_output() as captured_output:
+            self.game.print_score()
+        self.assertEqual(captured_output.getvalue(), expected_string)
 
     def test_game_print_score(self):
         p_hand = [10, 10]
@@ -122,7 +124,7 @@ class GameTestCase(TestCase):
         self,
         mock_deal,
         mock_stay,
-        mock_print,
+        args,
         *,
         p_cards,
         deal_card=None,
@@ -162,7 +164,7 @@ class GameTestCase(TestCase):
 
     @mock.patch('game.Game.turn_player', side_effect=[22, 21])
     @mock.patch('game.Game.turn_dealer')
-    def test_game_base_game_no_dealer_turn(self, mock_dealer, mock_player):
+    def test_game_base_game_no_dealer_turn(self, mock_dealer, *args):
         self.game.base_game()
         mock_dealer.assert_not_called()
         self.game.base_game()
