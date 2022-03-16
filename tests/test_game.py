@@ -8,9 +8,9 @@ from game import Game
 
 
 class GameTestCase(TestCase):
-    @classmethod
-    def setUp(cls):
-        cls.game = Game()
+    def setUp(self):
+        super().setUp()
+        self.game = Game()
 
     def assert_dealer_turn(self, cards, should_hit):
         self.game.dealer.hand = []
@@ -78,13 +78,15 @@ class GameTestCase(TestCase):
         expected_string = '*** You Lose ***\n Score: 0\n'
         self.assert_console_output(self.game.print_score, expected_string)
 
+    def assert_need_to_shuffle(self, should_be_shuffled):
+        self.game.shuffle_if_needed()
+        self.assertEqual(len(self.game.deck.cards) == 52, should_be_shuffled)
+
     def test_game_shuffle(self):
         self.game.deck.cards.pop(0)
-        self.game.shuffle_if_needed()
-        self.assertEqual(len(self.game.deck.cards), 51)
+        self.assert_need_to_shuffle(False)
         del self.game.deck.cards[:40]
-        self.game.shuffle_if_needed()
-        self.assertEqual(len(self.game.deck.cards), 52)
+        self.assert_need_to_shuffle(True)
 
     @mock.patch('game.Game.play_again', side_effect=[True, False])
     def test_game_play_again(self, *args):
@@ -129,6 +131,7 @@ class GameTestCase(TestCase):
     # @mock.patch('game.Game.post_game', return_value=None)
     # def test_game_play_again(self, *args):
     #     self.assertFalse(self.game.play_again())
+    #     self.assertTrue(self.game.play_again())
     #
     # THIS IS 80-81
     # @mock.patch('game.Game.turn_player', return_value=22)
