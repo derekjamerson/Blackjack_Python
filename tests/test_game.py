@@ -86,16 +86,53 @@ class GameTestCase(TestCase):
         self.game.shuffle_if_needed()
         self.assertEqual(len(self.game.deck.cards), 52)
 
-    # @mock.patch('player.human_player.HumanPlayer.choose_to_stay', return_value=True)
-    # @mock.patch('game.Game.print_game', return_value=None)
-    # @mock.patch('game.Game.deal_card')
-    # def test_game_turn_player(self, mock1, mock2, mock3):
-    #     self.game.human_player.hand = [Card(11, 1), Card(10, 0), Card(13, 3)]
-    #     self.assertEqual(self.game.turn_player(), 30)
-    #     mock1.return_value.get = False
-    #     mock3.wraps = self.game.human_player.hand.append(Card(3, 1))
-    #     self.assertEqual(self.game.turn_player(), 33)
-    #     mock1.return_value.get = False
-    #     self.game.human_player.hand = [Card(2, 0), Card(3, 3)]
-    #     mock3.wraps = self.game.human_player.hand.append(Card(2, 1))
-    #     self.assertEqual(self.game.turn_player(), 25)
+    @mock.patch('game.Game.play_again', side_effect=[True, False])
+    def test_game_play_again(self, *args):
+        self.assertIsNone(self.game.play_game())
+
+    @mock.patch('game.Game._turn_player', side_effect=[None, 1])
+    def test_game_turn_player_loop(self, *args):
+        self.assertEqual(self.game.turn_player(), 1)
+
+    @mock.patch('game.Game.deal_card')
+    @mock.patch(
+        'player.human_player.HumanPlayer.choose_to_stay',
+        side_effect=[True, False, False],
+    )
+    @mock.patch('game.Game.print_game', return_value=None)
+    def test_game_player_turn(self, mock_deal, *args):
+        self.game.human_player.hand = [Card(10, 2), Card(2, 0)]
+        self.assertEqual(self.game._turn_player(), 12)
+        self.game.human_player.hand = [Card(10, 2), Card(11, 0)]
+        mock_deal.return_value = self.game.human_player.hand.append(Card(12, 3))
+        self.assertEqual(self.game._turn_player(), 30)
+        self.game.human_player.hand = [Card(2, 2), Card(3, 0), Card(12, 4)]
+        self.assertIsNone(self.game._turn_player())
+
+    @mock.patch(
+        'player.human_player.HumanPlayer.get_input_from_user', side_effect=['q', 'f']
+    )
+    def test_game_quit_game(self, *args):
+        self.assertFalse(self.game.quit_game())
+        self.assertTrue(self.game.quit_game())
+
+    @mock.patch('game.Game.print_game', return_value=None)
+    @mock.patch('game.Game.print_score', return_value=None)
+    def test_game_post_game(self, *args):
+        self.game.post_game()
+        self.assertEqual(len(self.game.human_player.hand), 0)
+        self.assertEqual(len(self.game.dealer.hand), 0)
+
+    # THIS IS 63-67
+    # @mock.patch('game.Game.quit_game', side_effect=[True, False])
+    # @mock.patch('game.Game.base_game', return_value=None)
+    # @mock.patch('game.Game.post_game', return_value=None)
+    # def test_game_play_again(self, *args):
+    #     self.assertFalse(self.game.play_again())
+    #
+    # THIS IS 80-81
+    # @mock.patch('game.Game.turn_player', return_value=22)
+    # @mock.patch('game.Game.turn_dealer', return_value='dealer')
+    # def test_game_base_game(self, *args):
+    #     # self.assertIsNone(self.game.base_game())
+    #     self.assertEqual(self.game.base_game(), 'dealer')

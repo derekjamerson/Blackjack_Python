@@ -56,18 +56,34 @@ class Game:
 
     def play_game(self):
         while True:
-            response = HumanPlayer.get_input_from_user(
-                "Enter 'Q' to quit. 'P' to play:", ['q', 'p']
-            )
-            if response == 'q':
+            if not self.play_again():
                 break
-            self.shuffle_if_needed()
-            self.deal_game()
-            if self.turn_player() <= 21:
-                self.turn_dealer()
-            self.print_game(True)
-            self.print_score()
-            self.discard_hands()
+
+    def play_again(self):
+        if self.quit_game:
+            return False
+        self.base_game()
+        self.post_game()
+        return True
+
+    def quit_game(self):
+        response = HumanPlayer.get_input_from_user(
+            "Enter 'Q' to quit. 'P' to play:", ['q', 'p']
+        )
+        if response == 'q':
+            return False
+        self.shuffle_if_needed()
+        self.deal_game()
+        return True
+
+    def base_game(self):
+        if self.turn_player() < 22:
+            self.turn_dealer()
+
+    def post_game(self):
+        self.print_game(True)
+        self.print_score()
+        self.discard_hands()
 
     def turn_dealer(self):
         while True:
@@ -77,10 +93,14 @@ class Game:
 
     def turn_player(self):
         while True:
-            self.print_game(False)
-            if self.human_player.choose_to_stay():
-                return self.human_player.score
-            else:
-                self.deal_card(self.human_player)
-                if self.human_player.score > 21:
-                    return self.human_player.score
+            score = self._turn_player()
+            if score is not None:
+                return score
+
+    def _turn_player(self):
+        self.print_game(False)
+        if self.human_player.choose_to_stay():
+            return self.human_player.score
+        self.deal_card(self.human_player)
+        if self.human_player.score > 21:
+            return self.human_player.score
