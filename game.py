@@ -60,7 +60,7 @@ class Game:
                 break
 
     def play_again(self):
-        if self.quit_game:
+        if self.quit_game():
             return False
         self.base_game()
         self.post_game()
@@ -77,7 +77,7 @@ class Game:
         return True
 
     def base_game(self):
-        if self.turn_player() < 22:
+        if self.turn_player() <= 21:
             self.turn_dealer()
 
     def post_game(self):
@@ -85,17 +85,17 @@ class Game:
         self.print_score()
         self.discard_hands()
 
-    def turn_dealer(self):
-        while True:
-            if self.dealer.choose_to_stay():
-                break
-            self.deal_card(self.dealer)
-
     def turn_player(self):
         while True:
             score = self._turn_player()
             if score is not None:
                 return score
+
+    def turn_dealer(self):
+        while True:
+            if self.dealer.choose_to_stay():
+                break
+            self.deal_card(self.dealer)
 
     def _turn_player(self):
         self.print_game(False)
