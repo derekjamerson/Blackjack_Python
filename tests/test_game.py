@@ -19,13 +19,13 @@ class GameTestCase(TestCase):
             hand.append(Card(num, 1))
         return hand
 
-    def assert_dealer_turn(self, cards, should_hit):
-        self.game.dealer.hand = self.num_list_to_cards(cards)
+    def assert_dealer_turn(self, d_cards, should_hit):
+        self.game.dealer.hand = self.num_list_to_cards(d_cards)
         self.game.turn_dealer()
         if should_hit:
-            self.assertGreater(len(self.game.dealer.hand), len(cards))
+            self.assertGreater(len(self.game.dealer.hand), len(d_cards))
         else:
-            self.assertEqual(len(self.game.dealer.hand), len(cards))
+            self.assertEqual(len(self.game.dealer.hand), len(d_cards))
 
     def test_game_deal_hands(self):
         self.game.deal_game()
@@ -50,24 +50,31 @@ class GameTestCase(TestCase):
         sys.stdout = sys.__stdout__
         self.assertEqual(expected_output, captured_output.getvalue())
 
-    def test_game_print_game(self):
-        player_hand = [Card(2, 1), Card(2, 2)]
-        dealer_hand = [Card(3, 1), Card(3, 2)]
-        self.game.human_player.hand = player_hand
-        self.game.dealer.hand = dealer_hand
-        expected_string = f'Player: 4 {player_hand}\n' f'Dealer: 6 {dealer_hand}\n'
-        self.assert_console_output(partial(self.game.print_game, True), expected_string)
-        expected_string = (
-            f'Player: 4 {player_hand}\n' f'Dealer: ?? [{dealer_hand[0]}, ??]\n'
-        )
+    def assert_printed_game(self, p_cards, d_cards, game_over):
+        self.game.human_player.hand = self.num_list_to_cards(p_cards)
+        self.game.dealer.hand = self.num_list_to_cards(d_cards)
+        if game_over:
+            expected_string = (
+                f'Player: 4 {self.game.human_player.hand}\n'
+                f'Dealer: 6 {self.game.dealer.hand}\n'
+            )
+        else:
+            expected_string = (
+                f'Player: 4 {self.game.human_player.hand}\n'
+                f'Dealer: ?? [{self.game.dealer.hand[0]}, ??]\n'
+            )
         self.assert_console_output(
-            partial(self.game.print_game, False), expected_string
+            partial(self.game.print_game, game_over), expected_string
         )
 
-    def assert_decided_winner(self, p_hand, d_hand, player_win):
+    def test_game_print_game(self):
+        self.assert_printed_game([2, 2], [3, 3], False)
+        self.assert_printed_game([2, 2], [3, 3], True)
+
+    def assert_decided_winner(self, p_cards, d_cards, player_win):
         old_score = self.game.score
-        self.game.human_player.hand = self.num_list_to_cards(p_hand)
-        self.game.dealer.hand = self.num_list_to_cards(d_hand)
+        self.game.human_player.hand = self.num_list_to_cards(p_cards)
+        self.game.dealer.hand = self.num_list_to_cards(d_cards)
         self.assertEqual(self.game.decide_winner(), player_win)
         if player_win:
             self.assertEqual(self.game.score, old_score + 1)
@@ -80,13 +87,9 @@ class GameTestCase(TestCase):
         self.assert_decided_winner(p_hand, [10, 11, 12], True)
         self.assert_decided_winner(p_hand, [10, 12], False)
 
-    def assert_printed_score(self, p_hand, d_hand, player_win):
-        self.game.human_player.hand = []
-        self.game.dealer.hand = []
-        for c in p_hand:
-            self.game.human_player.hand.append(Card(c, 1))
-        for c in d_hand:
-            self.game.dealer.hand.append(Card(c, 1))
+    def assert_printed_score(self, p_cards, d_cards, player_win):
+        self.game.human_player.hand = self.num_list_to_cards(p_cards)
+        self.game.dealer.hand = self.num_list_to_cards(d_cards)
         if player_win:
             output = '*** You Win ***\n Score: 1\n'
         else:
