@@ -71,10 +71,10 @@ class Game:
             "Enter 'Q' to quit. 'P' to play:", ['q', 'p']
         )
         if response == 'q':
-            return False
+            return True
         self.shuffle_if_needed()
         self.deal_game()
-        return True
+        return False
 
     def base_game(self):
         if self.turn_player() <= 21:

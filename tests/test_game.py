@@ -149,7 +149,7 @@ class GameTestCase(TestCase):
         )
 
     @mock.patch(
-        'player.human_player.HumanPlayer.get_input_from_user', side_effect=['q', 'f']
+        'player.human_player.HumanPlayer.get_input_from_user', side_effect=['f', 'q']
     )
     def test_game_quit_game(self, *args):
         self.assertFalse(self.game.quit_game())
